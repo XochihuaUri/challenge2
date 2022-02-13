@@ -5,78 +5,94 @@ const alertaNull = document.querySelector("#null");
 const inputAhorcado = document.querySelector("#input-ahorcado");
 const btnAhorcado = document.querySelector("#btn-ahorcado")
 let palabras = ["PROGRAMADOR", "COACH", "JAVASCRIPT", "ALURA", "MEXICO", "MOLE", "CHALUPAS", "MOLOTES", "NOGADA", "HTML", "CSS", "REACT"];
-let intentos = 0;
+let intentos = 1;
 let palabraRandom;
 let arrayChar;
+
 let canvas = document.querySelector("#ahorcado");
 let ctx = canvas.getContext("2d");
-let xposition = 80;
+let xposition = 0;
+let positions = [];
+let arrayComparativo = [];
 
 btnIniciar.addEventListener("click",function(){
     limpiar();
-    intentos = 0;
+    positions = [];
+    intentos = 1;
     xposition = 50;
+    let pos = xposition;
     //selecciona un elemento del array aleatoriamente
     let rand = Math.floor(Math.random()*palabras.length);
     palabraRandom = palabras[rand];
-    //console.log(palabraRandom)
     arrayChar = palabraRandom.split('');
-    //console.log(palabraRandom);
+    //asignar las posiciones a positions
+    arrayChar.forEach(element => {
+        positions.push(pos);
+        pos += 15;
+    })
     //crear espacios de la palabra 
-    for(let i = 0; i < arrayChar.length; i++){
-        createLetter(arrayChar[i])
-        createLines();
-
-    }
+    arrayChar.forEach(element => createLines())
 
 })
 
 
 btnAhorcado.addEventListener("click", function(){
-    //console.log(intentos)
-    //hace un array con las letras de la palabra
-    
-    for(let i = 0; i < arrayChar.length; i++){
-
-
-        console.log(arrayChar[i])
-    }
-
+    let comprobador = false;
+    let ganaste = true;
     console.log(arrayChar)
-    //let intento = palabras[random].length;
-    switch(intentos){
-        case 1:
-            createBase();
-            break;
-        case 2:
-            createAsta();
-            break;
-        case 3:
-            createTope();
-            break;
-        case 4:
-            createCabeza();
-            break;
-        case 5:
-            createCuerpo();
-            break;
-        case 6:
-            createLeftLeg();
-            break;
-        case 7:
-            createRightLeg();
-            break;
-        case 8:
-            createLeftArm();
-            break;
-        case 9:
-            createRightArm();
-            break;
-        case 10:
-            break;
+    arrayChar.forEach(function(elem, i){
+        if(arrayChar[i] == inputAhorcado.value){
+            comprobador = true;
+            createLetter(arrayChar[i],positions[i]);
+            arrayComparativo[i] = arrayChar[i];
+        }
+    })
+    if(!comprobador){
+        switch(intentos){
+            case 1:
+                createBase();
+                break;
+            case 2:
+                createAsta();
+                break;
+            case 3:
+                createTope();
+                break;
+            case 4:
+                createCabeza();
+                break;
+            case 5:
+                createCuerpo();
+                break;
+            case 6:
+                createLeftLeg();
+                break;
+            case 7:
+                createRightLeg();
+                break;
+            case 8:
+                createLeftArm();
+                break;
+            case 9:
+                createRightArm();
+                break;
+            case 10:
+                break;
+        }
+        intentos++;
     }
-
-    intentos++;
+    inputAhorcado.value = "";
+    arrayChar.forEach(function(elem, i){
+        if(arrayComparativo[i] !== arrayChar[i]){
+            ganaste = false;
+        }
+    })
+    if(ganaste){
+        console.log("has ganao")
+        //CREAR FUNCION CON MENSAJE
+        intentos= 12;
+    }
+    
 })
 
 btnAdd.addEventListener("click", function(){
@@ -90,7 +106,6 @@ btnAdd.addEventListener("click", function(){
         removeAlerta(alerta);
         removeAlerta(alertaNull); 
         palabras.push(palabra);
-        console.log(palabras)
     }else if(!palabra){
         addAlerta(alertaNull);
     }else{
@@ -111,9 +126,9 @@ function limpiar(){
     ctx.clearRect(0,10, canvas.width, canvas.height);
 }
 //letras
-function createLetter(letra){
+function createLetter(letra, pos){
     ctx.font = "14px Arial";
-    ctx.fillText(letra, xposition, 130);
+    ctx.fillText(letra, pos, 130);
 }
 //lineas
 function createLines(){
