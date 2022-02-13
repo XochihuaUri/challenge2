@@ -8,12 +8,12 @@ let palabras = ["PROGRAMADOR", "COACH", "JAVASCRIPT", "ALURA", "MEXICO", "MOLE",
 let intentos = 1;
 let palabraRandom;
 let arrayChar;
-
 let canvas = document.querySelector("#ahorcado");
 let ctx = canvas.getContext("2d");
 let xposition = 0;
 let positions = [];
 let arrayComparativo = [];
+felicidades();
 
 btnIniciar.addEventListener("click",function(){
     limpiar();
@@ -90,6 +90,7 @@ btnAhorcado.addEventListener("click", function(){
     if(ganaste){
         console.log("has ganao")
         //CREAR FUNCION CON MENSAJE
+        felicidades();
         intentos= 12;
     }
     
@@ -121,7 +122,6 @@ function removeAlerta(elemento){
     elemento.classList.remove("alerta");
     elemento.classList.add("invisible");
 }
-
 function limpiar(){
     ctx.clearRect(0,10, canvas.width, canvas.height);
 }
@@ -130,6 +130,14 @@ function createLetter(letra, pos){
     ctx.font = "14px Arial";
     ctx.fillText(letra, pos, 130);
 }
+//felicidades
+function felicidades(){
+    ctx.font = "15px Arial";
+    ctx.fillStyle = "red";
+    ctx.fillText("¡Felicidades!,", 170, 70);
+    ctx.fillText("has ganado!", 170, 90);
+}
+
 //lineas
 function createLines(){
     ctx.beginPath();
@@ -143,6 +151,7 @@ function createLines(){
 //base
 function createBase(){
     ctx.beginPath();
+    ctx.fillStyle = "black";
     ctx.moveTo(5,145);
     ctx.lineTo(15,130);
     ctx.lineTo(25,145);
